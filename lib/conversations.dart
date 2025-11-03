@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-// Import the hypothetical chat screen
-import 'chats.dart';
+import 'chats.dart'; // Import your ChatScreen
 
-class conversations extends StatefulWidget {
-  const conversations({super.key});
+class Conversations extends StatefulWidget {
+  const Conversations({super.key});
 
   @override
-  State<conversations> createState() => _ConversationsState();
+  State<Conversations> createState() => _ConversationsState();
 }
 
 // Data Model
@@ -18,13 +17,29 @@ class Conversation {
   Conversation(this.name, this.lastMessage, this.imageUrl);
 }
 
-class _ConversationsState extends State<conversations> {
+class _ConversationsState extends State<Conversations> {
   // Dummy Data for the List
   final List<Conversation> _conversations = [
-    Conversation('Alice Johnson', 'Hey, how are you doing?', 'https://via.placeholder.com/150/0000FF/808080?text=A'),
-    Conversation('Bob Smith', 'Did you get the files I sent?', 'https://via.placeholder.com/150/FF0000/FFFFFF?text=B'),
-    Conversation('Charlie Brown', 'See you tomorrow at 10 AM.', 'https://via.placeholder.com/150/00FF00/000000?text=C'),
-    Conversation('Diana Prince', 'Thanks for your help!', 'https://via.placeholder.com/150/FFFF00/000000?text=D'),
+    Conversation(
+      'Alice Johnson',
+      'Hey, how are you doing?',
+      'https://via.placeholder.com/150/0000FF/808080?text=A',
+    ),
+    Conversation(
+      'Bob Smith',
+      'Did you get the files I sent?',
+      'https://via.placeholder.com/150/FF0000/FFFFFF?text=B',
+    ),
+    Conversation(
+      'Charlie Brown',
+      'See you tomorrow at 10 AM.',
+      'https://via.placeholder.com/150/00FF00/000000?text=C',
+    ),
+    Conversation(
+      'Diana Prince',
+      'Thanks for your help!',
+      'https://via.placeholder.com/150/FFFF00/000000?text=D',
+    ),
   ];
 
   @override
@@ -55,7 +70,10 @@ class _ConversationsState extends State<conversations> {
               itemCount: _conversations.length,
               itemBuilder: (context, index) {
                 final conversation = _conversations[index];
-                return ConversationListItem(conversation: conversation);
+                return ConversationListItem(
+                  conversation: conversation,
+                  currentUser: 'Aayush', // 👈 Add your current user name here
+                );
               },
             ),
           ),
@@ -65,24 +83,25 @@ class _ConversationsState extends State<conversations> {
   }
 }
 
-// --- Reusable Widget for a single conversation item (MODIFIED) ---
-
+// --- Reusable Widget for a single conversation item ---
 class ConversationListItem extends StatelessWidget {
   final Conversation conversation;
+  final String currentUser;
 
   const ConversationListItem({
     super.key,
     required this.conversation,
+    required this.currentUser,
   });
 
-  // Function to handle navigation
+  // Navigate to chat screen
   void _goToChat(BuildContext context) {
-    // Navigate to the ChatScreen, passing the conversation partner's name
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => ChatScreen(
           chatPartnerName: conversation.name,
+          currentUser: currentUser,
         ),
       ),
     );
@@ -90,9 +109,8 @@ class ConversationListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // **InkWell** provides a visual tap feedback (ripple effect)
     return InkWell(
-      onTap: () => _goToChat(context), // Call the navigation function on tap
+      onTap: () => _goToChat(context),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
         child: Row(
@@ -138,7 +156,7 @@ class ConversationListItem extends StatelessWidget {
               ),
             ),
 
-            // Optional: Timestamp
+            // Timestamp (optional)
             const Text(
               '10:30 AM',
               style: TextStyle(
